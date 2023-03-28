@@ -2,14 +2,22 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- *
- * This is just a demo for you, please run it on JDK17 (some statements may be not allowed in lower version).
+ * This is just a demo for you,
+ * please run it on JDK17 (some statements may be not allowed in lower version).
  * This is just a demo, and you can extend and implement functions
  * based on this demo, or implement it in a different way.
  */
@@ -17,6 +25,12 @@ public class OnlineCoursesAnalyzer {
 
     List<Course> courses = new ArrayList<>();
 
+    /**
+     * This is just a demo for you,
+     * please run it on JDK17 (some statements may be not allowed in lower version).
+     * This is just a demo, and you can extend and implement functions
+     * based on this demo, or implement it in a different way.
+     */
     public OnlineCoursesAnalyzer(String datasetPath) {
         BufferedReader br = null;
         String line;
@@ -25,12 +39,18 @@ public class OnlineCoursesAnalyzer {
             br.readLine();
             while ((line = br.readLine()) != null) {
                 String[] info = line.split(",(?=([^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)", -1);
-                Course course = new Course(info[0], info[1], new Date(info[2]), info[3], info[4], info[5],
-                        Integer.parseInt(info[6]), Integer.parseInt(info[7]), Integer.parseInt(info[8]),
-                        Integer.parseInt(info[9]), Integer.parseInt(info[10]), Double.parseDouble(info[11]),
-                        Double.parseDouble(info[12]), Double.parseDouble(info[13]), Double.parseDouble(info[14]),
-                        Double.parseDouble(info[15]), Double.parseDouble(info[16]), Double.parseDouble(info[17]),
-                        Double.parseDouble(info[18]), Double.parseDouble(info[19]), Double.parseDouble(info[20]),
+                Course course = new Course(info[0], info[1], new Date(info[2]),
+                        info[3], info[4], info[5],
+                        Integer.parseInt(info[6]), Integer.parseInt(info[7]),
+                        Integer.parseInt(info[8]),
+                        Integer.parseInt(info[9]), Integer.parseInt(info[10]),
+                        Double.parseDouble(info[11]),
+                        Double.parseDouble(info[12]), Double.parseDouble(info[13]),
+                        Double.parseDouble(info[14]),
+                        Double.parseDouble(info[15]), Double.parseDouble(info[16]),
+                        Double.parseDouble(info[17]),
+                        Double.parseDouble(info[18]), Double.parseDouble(info[19]),
+                        Double.parseDouble(info[20]),
                         Double.parseDouble(info[21]), Double.parseDouble(info[22]));
                 courses.add(course);
             }
@@ -48,12 +68,25 @@ public class OnlineCoursesAnalyzer {
     }
 
     //1
+    /**
+     * This is just a demo for you,
+     * please run it on JDK17 (some statements may be not allowed in lower version).
+     * This is just a demo, and you can extend and implement functions
+     * based on this demo, or implement it in a different way.
+     */
     public Map<String, Integer> getPtcpCountByInst() {
         return courses.stream()
-                .collect(Collectors.groupingBy(c -> c.institution, TreeMap::new, Collectors.summingInt(c -> c.participants)));
+                .collect(Collectors.groupingBy(c -> c.institution,
+                        TreeMap::new, Collectors.summingInt(c -> c.participants)));
     }
 
     //2
+    /**
+     * This is just a demo for you,
+     * please run it on JDK17 (some statements may be not allowed in lower version).
+     * This is just a demo, and you can extend and implement functions
+     * based on this demo, or implement it in a different way.
+     */
     public Map<String, Integer> getPtcpCountByInstAndSubject() {
         return courses.stream()
                 .collect(Collectors.groupingBy(c -> c.institution + "-" + c.subject,
@@ -61,10 +94,17 @@ public class OnlineCoursesAnalyzer {
                 .entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed()
                         .thenComparing(Map.Entry.comparingByKey()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v1, LinkedHashMap::new));
+                .collect(Collectors.toMap(Map.Entry::getKey,
+                        Map.Entry::getValue, (v1, v2) -> v1, LinkedHashMap::new));
     }
 
     //3
+    /**
+     * This is just a demo for you,
+     * please run it on JDK17 (some statements may be not allowed in lower version).
+     * This is just a demo, and you can extend and implement functions
+     * based on this demo, or implement it in a different way.
+     */
     public Map<String, List<List<String>>> getCourseListOfInstructor() {
         Map<String, List<List<String>>> result = new HashMap<>();
 
@@ -88,7 +128,7 @@ public class OnlineCoursesAnalyzer {
             }
         }
 
-        for (String key: result.keySet()) {
+        for (String key : result.keySet()) {
             Collections.sort(result.get(key).get(0));
             Collections.sort(result.get(key).get(1));
         }
@@ -98,6 +138,12 @@ public class OnlineCoursesAnalyzer {
 
 
     //4
+    /**
+     * This is just a demo for you,
+     * please run it on JDK17 (some statements may be not allowed in lower version).
+     * This is just a demo, and you can extend and implement functions
+     * based on this demo, or implement it in a different way.
+     */
     public List<String> getCourses(int topK, String by) {
         courses.sort(Comparator.comparing((Function<Course, Double>) course -> {
             if (by.equals("hours")) {
@@ -106,8 +152,8 @@ public class OnlineCoursesAnalyzer {
                 return (double) course.participants;
             }
         })
-                        .reversed().
-                        thenComparing(course -> course.title)
+                        .reversed()
+                        .thenComparing(course -> course.title)
         );
         return courses.stream()
                 .map(course -> course.title)
@@ -117,9 +163,17 @@ public class OnlineCoursesAnalyzer {
     }
 
     //5
-    public List<String> searchCourses(String courseSubject, double percentAudited, double totalCourseHours) {
+    /**
+     * This is just a demo for you,
+     * please run it on JDK17 (some statements may be not allowed in lower version).
+     * This is just a demo, and you can extend and implement functions
+     * based on this demo, or implement it in a different way.
+     */
+    public List<String> searchCourses(String courseSubject, double percentAudited,
+                                      double totalCourseHours) {
         return courses.stream()
-                .filter(course -> course.subject.toLowerCase().contains(courseSubject.toLowerCase()))
+                .filter(course -> course.subject.toLowerCase()
+                        .contains(courseSubject.toLowerCase()))
                 .filter(course -> course.percentAudited >= percentAudited)
                 .filter(course -> course.totalHours <= totalCourseHours)
                 .sorted(Comparator.comparing(course -> course.title))
@@ -129,13 +183,20 @@ public class OnlineCoursesAnalyzer {
     }
 
     //6
+    /**
+     * This is just a demo for you,
+     * please run it on JDK17 (some statements may be not allowed in lower version).
+     * This is just a demo, and you can extend and implement functions
+     * based on this demo, or implement it in a different way.
+     */
     public List<String> recommendCourses(int age, int gender, int isBachelorOrHigher) {
         HashMap<String, double[]> hashMap = new HashMap<>();
         HashMap<String, String> num2title = new HashMap<>();
         HashMap<String, Date> num2date = new HashMap<>();
-        for (Course course: courses) {
+        for (Course course : courses) {
             if (!hashMap.containsKey(course.number)) {
-                hashMap.put(course.number, new double[]{course.medianAge, course.percentMale, course.percentDegree, 1});
+                hashMap.put(course.number, new double[]{course.medianAge,
+                        course.percentMale, course.percentDegree, 1});
                 num2title.put(course.number, course.title);
                 num2date.put(course.number, course.launchDate);
             } else {
@@ -149,16 +210,18 @@ public class OnlineCoursesAnalyzer {
                 }
             }
         }
-        for (String number: hashMap.keySet()) {
+        for (String number : hashMap.keySet()) {
             hashMap.get(number)[0] /= hashMap.get(number)[3];
             hashMap.get(number)[1] /= hashMap.get(number)[3];
             hashMap.get(number)[2] /= hashMap.get(number)[3];
-            hashMap.get(number)[3] = Math.pow((age - hashMap.get(number)[0]), 2) + Math.pow((gender*100 - hashMap.get(number)[1]), 2) + Math.pow((isBachelorOrHigher*100 - hashMap.get(number)[2]), 2);
+            hashMap.get(number)[3] = Math.pow((age - hashMap.get(number)[0]), 2)
+                    + Math.pow((gender * 100 - hashMap.get(number)[1]), 2)
+                    + Math.pow((isBachelorOrHigher * 100 - hashMap.get(number)[2]), 2);
         }
         return num2title.keySet().stream()
-                .sorted((n1,n2) -> {
-                    if (hashMap.get(n1)[3]!=hashMap.get(n2)[3]) {
-                        return Double.compare(hashMap.get(n1)[3],hashMap.get(n2)[3]);
+                .sorted((n1, n2) -> {
+                    if (hashMap.get(n1)[3] != hashMap.get(n2)[3]) {
+                        return Double.compare(hashMap.get(n1)[3], hashMap.get(n2)[3]);
                     } else {
                         return num2title.get(n1).compareTo(num2title.get(n2));
                     }
